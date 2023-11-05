@@ -30,7 +30,7 @@ class BaseService:
         self.manager = manager
 
     def create(self, data):
-        return self.manager.create(data)
+        return self.manager.add_one(data)
 
     def get(self, model, **kwargs):
         return self.manager.get_one(model, **kwargs)
