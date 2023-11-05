@@ -3,11 +3,12 @@ from starlette.middleware.errors import ServerErrorMiddleware
 from starlette.middleware.gzip import GZipMiddleware
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
-from app.routers import auth
+from app.routers import auth, user
 
 app = FastAPI()
 
 app.include_router(auth.router, prefix="/v1", tags=["v1"])
+app.include_router(user.router, prefix="/v1", tags=["v1"])
 
 app.add_middleware(GZipMiddleware)
 app.add_middleware(TrustedHostMiddleware)

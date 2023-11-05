@@ -1,22 +1,23 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
+from starlette import status
+
 from app.backend.session import SessionLocal, get_db
 from app.schemas.v1.auth import CreateUserSchema, LoginSchema
-from app.services.auth import AuthService, AuthDataManager
-from app.utils.auth import create_access_token
+from app.schemas.v1.token import TokenResponseSchema
+from app.services.auth import AuthService, UserDataManager
 
 router = APIRouter(prefix="/auth")
-auth_service = AuthService(session=SessionLocal, manager=AuthDataManager)
+auth_service = AuthService(session=SessionLocal, manager=UserDataManager)
 
 
-@router.post("/register", response_model=CreateUserSchema, status_code=201)
-async def register(user: CreateUserSchema, db: Session = Depends(get_db)):
-    created_user = auth_service.create_user(user, db)
+@router.post("/register", response_model=CreateUserSchema, status_code=status.HTTP_201_CREATED)
+async def register(user: CreateUserSchema, db_session: Session = Depends(get_db)):
+    created_user = auth_service.create_user(user, db_session)
     return created_user
 
 
-@router.post("/login", response_model=dict)
-async def login(login_data: LoginSchema, db: Session = Depends(get_db)):
-    user = auth_service.login(login_data, db)
-    access_token = create_access_token(data={"sub": user["id"]})
-    return {"access_token": access_token, "token_type": "bearer"}
+@router.post("/login", response_model=TokenResponseSchema, status_code=status.HTTP_200_OK)
+async def login(login_data: LoginSchema, db_session: Session = Depends(get_db)):
+    access_token = auth_service.login(login_data, db_session)
+    return access_token

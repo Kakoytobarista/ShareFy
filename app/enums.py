@@ -7,6 +7,7 @@ class ErrorEnum(enum.Enum):
     INVALID_INPUT_DATA = "Invalid input data"
     EMAIL_ALREADY_EXIST = "Email already in use"
     LOGIN_ALREADY_EXIST = "Login already in use"
+    INVALID_TOKEN = "Invalid token"
 
 
 class PersonTypeEnum(enum.Enum):

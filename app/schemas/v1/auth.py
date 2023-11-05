@@ -1,24 +1,7 @@
-from pydantic import BaseModel
-from enum import Enum as PydanticEnum
 from datetime import datetime
+from typing import Optional
 
-
-class PersonType(str, PydanticEnum):
-    regular = "regular"
-    moderator = "moderator"
-    admin = "admin"
-
-
-class AuthUserSchema(BaseModel):
-    id: int
-    login: str
-    hashed_password: str
-    email: str
-    first_name: str
-    last_name: str
-    date_of_birth: datetime
-    person_type: PersonType
-    date_of_create: datetime
+from pydantic import BaseModel
 
 
 class CreateUserSchema(BaseModel):
@@ -26,6 +9,11 @@ class CreateUserSchema(BaseModel):
     email: str
     hashed_password: str
     date_of_create: datetime = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    person_type: str = 'regular'
+    date_of_birth: datetime = None
+    is_active: bool = True
 
 
 class LoginSchema(BaseModel):
