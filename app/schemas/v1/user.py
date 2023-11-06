@@ -20,3 +20,7 @@ class UserSchema(BaseModel):
     date_of_create: datetime = None
     is_active: bool | int = None
 
+
+class DeactivateSchema(BaseModel):
+    id: int
+    is_active: bool | int = 0

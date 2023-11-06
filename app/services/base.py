@@ -12,15 +12,15 @@ class BaseDataManager:
     def get_one(self, model, **kwargs):
         return self.session.query(model).filter_by(**kwargs).first()
 
-    def get_all(self, model):
-        return self.session.query(model).all()
+    def get_all(self, model, **kwargs):
+        return self.session.query(model).filter_by(**kwargs).all()
 
-    def update(self, model):
-        self.session.add(model)
+    def update(self, model, update_data, **filters):
+        self.session.query(model).filter_by(**filters).update(update_data)
         self.session.commit()
 
     def delete(self, model):
-        self.session.delete(model)
+        self.session.delete(instance=model)
         self.session.commit()
 
 
@@ -35,8 +35,8 @@ class BaseService:
     def get(self, model, **kwargs):
         return self.manager.get_one(model, **kwargs)
 
-    def update(self, model, data):
-        return self.manager.update(model, data)
+    def update(self, model, filters, update_data):
+        return self.manager.update(model, filters, update_data)
 
     def delete(self, model):
         return self.manager.delete(model)
