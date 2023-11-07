@@ -56,8 +56,7 @@ class AuthService(HashingMixin, BaseService):
                                 first_name=user_model.first_name,
                                 last_name=user_model.last_name,
                                 person_type=user_model.person_type,
-                                is_active=user_model.is_active
-                                )
+                                is_active=user_model.is_active)
 
     def login(self, login_data: LoginSchema, db: Session) -> TokenResponseSchema:
         user = UserDataManager(session=db).get_user_by_email(email=login_data.email)

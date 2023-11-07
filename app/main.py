@@ -7,8 +7,8 @@ from app.routers import auth, user
 
 app = FastAPI()
 
-app.include_router(auth.router, prefix="/v1", tags=["v1"])
-app.include_router(user.router, prefix="/v1", tags=["v1"])
+app.include_router(auth.router, prefix="/v1", tags=["auth"])
+app.include_router(user.router, prefix="/v1", tags=["users"])
 
 app.add_middleware(GZipMiddleware)
 app.add_middleware(TrustedHostMiddleware)
