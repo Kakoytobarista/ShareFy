@@ -13,6 +13,7 @@ class ErrorEnum(enum.Enum):
     EMAIL_ALREADY_EXIST = "Email already in use"
     LOGIN_ALREADY_EXIST = "Login already in use"
     INVALID_TOKEN = "Invalid token"
+    PERMISSION_ERROR = "Your permission level is insufficient to access this resource."
 
 
 class PersonTypeEnum(enum.Enum):

@@ -15,8 +15,9 @@ class BaseDataManager:
     def get_all(self, model, **kwargs):
         return self.session.query(model).filter_by(**kwargs).all()
 
-    def update(self, model, update_data, **filters):
-        self.session.query(model).filter_by(**filters).update(update_data)
+    def update(self, model, updated_data: dict):
+        for key, value in updated_data.items():
+            setattr(model, key, value)
         self.session.commit()
 
     def delete(self, model):

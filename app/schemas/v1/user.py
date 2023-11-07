@@ -11,8 +11,8 @@ class PersonType(str, PydanticEnum):
 
 class UserSchema(BaseModel):
     id: int
-    login: str
-    email: str
+    login: str = None
+    email: str = None
     first_name: str | None = None
     last_name: str | None = None
     date_of_birth: datetime | None = None
@@ -24,3 +24,8 @@ class UserSchema(BaseModel):
 class DeactivateSchema(BaseModel):
     id: int
     is_active: bool | int = 0
+
+
+class PersonTypeSchema(BaseModel):
+    id: int
+    person_type: PersonType = "regular"

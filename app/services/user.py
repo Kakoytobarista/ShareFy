@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.enums import ErrorEnum
 from app.models.v1.user import UserModel
-from app.schemas.v1.user import UserSchema, DeactivateSchema
+from app.schemas.v1.user import UserSchema, DeactivateSchema, PersonTypeSchema
 from app.services.base import BaseDataManager, BaseService
 
 
@@ -26,12 +26,21 @@ class UserService(BaseService):
     @staticmethod
     def deactivate_user(user: DeactivateSchema, session: Session):
         user_data_manager = UserDataManager(session=session)
-        user: UserModel = user_data_manager.get_user_by_id(user_id=user.id)
+        user_model = user_data_manager.get_user_by_id(user_id=user.id)
         if not user:
             raise HTTPException(status_code=HTTPStatus.NOT_FOUND,
                                 detail=ErrorEnum.USER_NOT_FOUND.value)
 
-        user_data_manager.deactivate_user(user=user)
+        user_data_manager.deactivate_user(user_model=user_model)
+        return user
+
+    @staticmethod
+    def change_person_type(user: PersonTypeSchema, session: Session):
+        user_model = UserDataManager(session=session).get_user_by_id(user_id=user.id)
+        if not user_model:
+            raise HTTPException(status_code=HTTPStatus.NOT_FOUND,
+                                detail=ErrorEnum.USER_NOT_FOUND.value)
+        UserDataManager(session=session).update_user(user_model=user_model, updated_data=user.model_dump())
         return user
 
 
@@ -52,15 +61,9 @@ class UserDataManager(BaseDataManager):
     def get_active_users(self) -> [UserModel]:
         return self.get_all(model=UserModel, is_active=True)
 
-    def deactivate_user(self, user: DeactivateSchema) -> None:
-        user.is_active = False
+    def deactivate_user(self, user_model: UserModel) -> None:
+        user_model.is_active = False
         self.session.commit()
 
-    def update_user(self, user: UserSchema, updated_data: dict):
-        user = self.get_user_by_id(user_id=user.id)
-        if not user:
-            raise HTTPException(status_code=HTTPStatus.BAD_REQUEST,
-                                detail=ErrorEnum.LOGIN_ALREADY_EXIST.value)
-        for key, value in updated_data.items():
-            setattr(user, key, value)
-        self.update(model=user, update_data=updated_data)
+    def update_user(self, user_model: UserModel, updated_data: dict):
+        self.update(model=user_model, updated_data=updated_data)
