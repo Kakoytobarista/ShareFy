@@ -11,7 +11,9 @@ class PermissionChecker:
     def __init__(self, required_permissions: list[str]) -> None:
         self.required_permissions = required_permissions
 
-    def __call__(self, user: PersonTypeSchema = Depends(get_current_user)) -> bool:
+    async def __call__(self, user: PersonTypeSchema = Depends(get_current_user)) -> bool:
+        user = await user
+        print(user)
         if user.person_type not in self.required_permissions:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,

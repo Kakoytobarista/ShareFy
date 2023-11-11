@@ -1,43 +1,47 @@
-from sqlalchemy.orm import Session
+from abc import abstractmethod, ABC, ABCMeta
+from typing import List, Union, Any, Type
+
+from app.types import T
+from app.utils.utils import combine_classes, ManagerCombine
 
 
-class BaseDataManager:
-    def __init__(self, session: Session):
-        self.session = session
+class AbstractBaseService(ABC, metaclass=ABCMeta):
+    @abstractmethod
+    def create_item(self, data) -> None:
+        pass
 
-    def add_one(self, model):
-        self.session.add(model)
-        self.session.commit()
+    @abstractmethod
+    def get_items(self, model, **kwargs) -> List[Union[T, None]]:
+        pass
 
-    def get_one(self, model, **kwargs):
-        return self.session.query(model).filter_by(**kwargs).first()
+    @abstractmethod
+    def get_item(self, model, **kwargs) -> Union[T, None]:
+        pass
 
-    def get_all(self, model, **kwargs):
-        return self.session.query(model).filter_by(**kwargs).all()
+    @abstractmethod
+    def update_item(self, model, filters, update_data) -> None:
+        pass
 
-    def update(self, model, updated_data: dict):
-        for key, value in updated_data.items():
-            setattr(model, key, value)
-        self.session.commit()
-
-    def delete(self, model):
-        self.session.delete(instance=model)
-        self.session.commit()
+    @abstractmethod
+    def delete_item(self, model) -> None:
+        pass
 
 
-class BaseService:
-    def __init__(self, session, manager):
-        self.session = session
-        self.manager = manager
+class BaseService(AbstractBaseService):
+    def __init__(self, managers: Any):
+        self.manager: ManagerCombine = combine_classes(*managers)
 
-    def create(self, data):
-        return self.manager.add_one(data)
+    def create_item(self, data):
+        return self.manager.create(model=data)
 
-    def get(self, model, **kwargs):
-        return self.manager.get_one(model, **kwargs)
+    def get_items(self, model, **kwargs):
+        return self.manager.get(model, **kwargs).all()
 
-    def update(self, model, filters, update_data):
+    def get_item(self, model, **kwargs):
+        return self.manager.get(model, **kwargs)
+
+    def update_item(self, model, filters, update_data):
         return self.manager.update(model, filters, update_data)
 
-    def delete(self, model):
+    def delete_item(self, model):
         return self.manager.delete(model)

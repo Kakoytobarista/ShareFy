@@ -8,13 +8,14 @@ from fastapi import HTTPException, Depends
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 from dotenv import load_dotenv
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
 from starlette import status
 
 from app.backend.session import get_db
+from app.data_managers.user import UserDataManager
 from app.enums import ErrorEnum
 from app.models.v1.user import UserModel
-from app.services.user import UserDataManager
 
 load_dotenv()
 
@@ -24,7 +25,7 @@ LIVE_TIME_TOKEN = os.getenv("LIVE_TIME_TOKEN")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
-def create_access_token(user: UserModel):
+async def create_access_token(user: UserModel):
     expire = datetime.utcnow() + timedelta(minutes=int(LIVE_TIME_TOKEN))
     user_copy = deepcopy(user)
     to_encode_data = {"exp": expire, "sub": user_copy.login}
@@ -32,8 +33,9 @@ def create_access_token(user: UserModel):
     return encoded_jwt
 
 
-async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db_session: Session = Depends(get_db)):
+async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db_session: AsyncSession = Depends(get_db)):
     try:
+        print("JHELLO")
         payload = jwt.decode(token=token, key=SECRET_KEY, algorithms=[ALGORITHM])
         login = payload.get("sub")
         if login is None:

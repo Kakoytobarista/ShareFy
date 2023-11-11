@@ -35,11 +35,11 @@ async def send_email_async(subject: str, email_to: str, template_path: str, lett
     await fm.send_message(message)
 
 
-def send_email_background(background_tasks: BackgroundTasks,
-                          subject: str,
-                          email_to: str,
-                          template_path: str,
-                          letter: bool = True) -> None:
+async def send_email_background(background_tasks: BackgroundTasks,
+                                subject: str,
+                                email_to: str,
+                                template_path: str,
+                                letter: bool = True) -> None:
     if letter:
         with open(template_path, "r") as file:
             html_content = file.read()

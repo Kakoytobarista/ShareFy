@@ -2,14 +2,12 @@ from http import HTTPStatus
 
 from passlib.context import CryptContext
 from fastapi import HTTPException
-from sqlalchemy.orm import Session
 
 from app.enums import ErrorEnum
 from app.models.v1.user import UserModel
 from app.schemas.v1.auth import CreateUserSchema, LoginSchema
 from app.schemas.v1.token import TokenResponseSchema
-from app.services.base import BaseDataManager, BaseService
-from app.services.user import UserDataManager
+from app.services.base import BaseService
 from app.utils.token import create_access_token
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -26,14 +24,16 @@ class HashingMixin:
 
 
 class AuthService(HashingMixin, BaseService):
+    def __init__(self, managers):
+        super().__init__(managers=managers)
 
-    def create_user(self, user: CreateUserSchema, db: Session) -> CreateUserSchema:
-        existing_user = UserDataManager(session=db).get_user_by_email(user.email)
+    async def create_user(self, user: CreateUserSchema) -> CreateUserSchema:
+        existing_user = await self.manager.get_user_by_email(email=user.email)
         if existing_user:
             raise HTTPException(status_code=HTTPStatus.BAD_REQUEST,
                                 detail=ErrorEnum.EMAIL_ALREADY_EXIST.value)
 
-        existing_user = UserDataManager(session=db).get_user_by_login(user.login)
+        existing_user = await self.manager.get_user_by_login(login=user.login)
         if existing_user:
             raise HTTPException(status_code=HTTPStatus.BAD_REQUEST,
                                 detail=ErrorEnum.LOGIN_ALREADY_EXIST.value)
@@ -48,27 +48,27 @@ class AuthService(HashingMixin, BaseService):
             person_type=user.person_type,
             is_active=user.is_active
         )
-        AuthDataManager(session=db).create_user(user=user_model)
-        return CreateUserSchema(login=user_model.login,
-                                email=user_model.email,
-                                hashed_password="Hidden",
-                                date_of_create=user_model.date_of_create,
-                                first_name=user_model.first_name,
-                                last_name=user_model.last_name,
-                                person_type=user_model.person_type,
-                                is_active=user_model.is_active)
 
-    def login(self, login_data: LoginSchema, db: Session) -> TokenResponseSchema:
-        user = UserDataManager(session=db).get_user_by_email(email=login_data.email)
+        await self.manager.create(model=user_model)
+        saved_user = await self.manager.get_user_by_login(login=user.login)
+        user_schema = CreateUserSchema(
+            login=saved_user.login,
+            email=saved_user.email,
+            hashed_password="Hidden",
+            date_of_create=saved_user.date_of_create,
+            first_name=saved_user.first_name,
+            last_name=saved_user.last_name,
+            person_type=saved_user.person_type,
+            is_active=saved_user.is_active
+        )
+        return user_schema
+
+    async def login(self, login_data: LoginSchema) -> TokenResponseSchema:
+        user = await self.manager.get_user_by_email(email=login_data.email)
         if not user:
             raise HTTPException(status_code=HTTPStatus.BAD_REQUEST, detail=ErrorEnum.USER_NOT_FOUND.value)
         if not self.verify(user.hashed_password, login_data.hashed_password):
             raise HTTPException(status_code=HTTPStatus.BAD_REQUEST, detail=ErrorEnum.INCORRECT_PASSWORD.value)
 
-        access_token = create_access_token(user=user)
+        access_token = await create_access_token(user=user)
         return TokenResponseSchema(access_token=access_token, token_type="bearer")
-
-
-class AuthDataManager(BaseDataManager):
-    def create_user(self, user: UserModel) -> None:
-        self.add_one(user)
