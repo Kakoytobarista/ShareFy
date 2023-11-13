@@ -5,6 +5,7 @@ from starlette import status
 from app.backend.session import get_db
 from app.data_managers.auth import AuthDataManager
 from app.data_managers.user import UserDataManager
+from app.enums import EndpointPath
 from app.schemas.v1.auth import CreateUserSchema, LoginSchema
 from app.schemas.v1.token import TokenResponseSchema
 from app.services.auth import AuthService
@@ -16,7 +17,7 @@ class SendMailSuccessCreateAccError(Exception):
     pass
 
 
-@router.post("/register", response_model=CreateUserSchema, status_code=status.HTTP_201_CREATED)
+@router.post(EndpointPath.REGISTER.value, response_model=CreateUserSchema, status_code=status.HTTP_201_CREATED)
 async def register(user: CreateUserSchema, session: AsyncSession = Depends(get_db)):
     auth_service = AuthService(managers=[UserDataManager(session=session),
                                          AuthDataManager(session=session)])
@@ -25,7 +26,7 @@ async def register(user: CreateUserSchema, session: AsyncSession = Depends(get_d
     return created_user
 
 
-@router.post("/login", response_model=TokenResponseSchema, status_code=status.HTTP_200_OK)
+@router.post(EndpointPath.LOGIN.value, response_model=TokenResponseSchema, status_code=status.HTTP_200_OK)
 async def login(login_data: LoginSchema, session: AsyncSession = Depends(get_db)):
     auth_service = AuthService(managers=[UserDataManager(session=session),
                                          AuthDataManager(session=session)])

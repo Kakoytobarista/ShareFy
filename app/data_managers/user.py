@@ -12,9 +12,6 @@ class UserDataManager(SQLAlchemyDataManager):
     async def get_user_by_email(self, email: str) -> UserModel:
         return await self.get(model=UserModel, email=email)
 
-    async def get_user_by_login(self, login: str) -> UserModel:
-        return await self.get(UserModel, login=login)
-
     async def get_all_users(self) -> List[UserModel]:
         return await self.get_all(model=UserModel)
 

@@ -39,3 +39,13 @@ class LetterNameEnum(enum.Enum):
 class SubjectMailEnum(enum.Enum):
     ACCOUNT_CREATED = "Account Successfully created!"
     ACCOUNT_BLOCKED = "Your account has been Blocked."
+
+
+class EndpointPath(enum.Enum):
+    REGISTER = "/register"
+    LOGIN = "/login"
+    GET_ALL_USERS = "/get_all_users"
+    GET_USER = "/get_user/{user_id}"
+    GET_ACTIVE_USERS = "/get_active_users"
+    DEACTIVATE_USER = "/deactivate_user"
+    CHANGE_PERSON_TYPE = "/change_person_type"

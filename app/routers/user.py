@@ -6,7 +6,7 @@ from starlette import status
 
 from app.backend.session import get_db
 from app.data_managers.user import UserDataManager
-from app.enums import PersonTypeEnum
+from app.enums import PersonTypeEnum, EndpointPath
 from app.permission import PermissionChecker
 from app.schemas.v1.user import UserSchema, DeactivateSchema, PersonTypeSchema
 from app.services.user import UserService
@@ -18,7 +18,8 @@ router = APIRouter(prefix="/user")
 class SendMailDeactivateAccountError(Exception):
     pass
 
-@router.get("/get_all_users", response_model=List[UserSchema],
+
+@router.get(EndpointPath.GET_ALL_USERS.value, response_model=List[UserSchema],
             status_code=status.HTTP_200_OK,
             dependencies=[Depends(get_current_user),
                           Depends(PermissionChecker(required_permissions=[PersonTypeEnum.REGULAR.value,
@@ -29,7 +30,7 @@ async def get_all_users(session: AsyncSession = Depends(get_db)):
     return users
 
 
-@router.get("/get_user/{user_id}", response_model=UserSchema,
+@router.get(EndpointPath.GET_USER.value, response_model=UserSchema,
             status_code=status.HTTP_200_OK,
             dependencies=[Depends(get_current_user),
                           Depends(PermissionChecker(required_permissions=[PersonTypeEnum.REGULAR.value,
@@ -40,7 +41,7 @@ async def get_user(user_id: int, session: AsyncSession = Depends(get_db)):
     return user
 
 
-@router.get("/get_active_users", response_model=List[UserSchema],
+@router.get(EndpointPath.GET_ACTIVE_USERS.value, response_model=List[UserSchema],
             status_code=status.HTTP_200_OK,
             dependencies=[Depends(get_current_user),
                           Depends(PermissionChecker(required_permissions=[PersonTypeEnum.MODERATOR.value,
@@ -52,7 +53,7 @@ async def get_active_users(session: AsyncSession = Depends(get_db)):
     return users
 
 
-@router.get("/deactivate_user/{user_id}", response_model=DeactivateSchema,
+@router.get(EndpointPath.DEACTIVATE_USER.value, response_model=DeactivateSchema,
             status_code=status.HTTP_200_OK,
             dependencies=[Depends(get_current_user),
                           Depends(PermissionChecker(
@@ -63,7 +64,7 @@ async def deactivate_user(user_id: int, session: AsyncSession = Depends(get_db))
     return user
 
 
-@router.post("/change_person_type", response_model=PersonTypeSchema,
+@router.post(EndpointPath.CHANGE_PERSON_TYPE.value, response_model=PersonTypeSchema,
              status_code=status.HTTP_200_OK,
              dependencies=[Depends(get_current_user),
                            Depends(PermissionChecker(required_permissions=[PersonTypeEnum.ADMIN.value,

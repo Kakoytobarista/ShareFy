@@ -28,20 +28,16 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 async def create_access_token(user: UserModel):
     expire = datetime.utcnow() + timedelta(minutes=int(LIVE_TIME_TOKEN))
     user_copy = deepcopy(user)
-    to_encode_data = {"exp": expire, "sub": user_copy.login}
+    to_encode_data = {"exp": expire, "sub": user_copy.email}
     encoded_jwt = jwt.encode(claims=to_encode_data, key=SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
 
 async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db_session: AsyncSession = Depends(get_db)):
     try:
-        print("JHELLO")
         payload = jwt.decode(token=token, key=SECRET_KEY, algorithms=[ALGORITHM])
-        login = payload.get("sub")
-        if login is None:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=ErrorEnum.INVALID_TOKEN.value)
-
-        user = UserDataManager(session=db_session).get_user_by_login(login=login)
+        email = payload.get("sub")
+        user = UserDataManager(session=db_session).get_user_by_email(email=email)
         if user is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorEnum.USER_NOT_FOUND.value)
 

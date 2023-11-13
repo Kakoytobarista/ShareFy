@@ -33,31 +33,18 @@ class AuthService(HashingMixin, BaseService):
             raise HTTPException(status_code=HTTPStatus.BAD_REQUEST,
                                 detail=ErrorEnum.EMAIL_ALREADY_EXIST.value)
 
-        existing_user = await self.manager.get_user_by_login(login=user.login)
-        if existing_user:
-            raise HTTPException(status_code=HTTPStatus.BAD_REQUEST,
-                                detail=ErrorEnum.LOGIN_ALREADY_EXIST.value)
-
         user_model = UserModel(
-            login=user.login,
             email=user.email,
             hashed_password=self.bcrypt(user.hashed_password),
-            first_name=user.first_name,
-            last_name=user.last_name,
-            date_of_birth=user.date_of_birth,
-            person_type=user.person_type,
-            is_active=user.is_active
+            date_of_create=user.date_of_create,
         )
 
         await self.manager.create(model=user_model)
-        saved_user = await self.manager.get_user_by_login(login=user.login)
+        saved_user = await self.manager.get_user_by_email(email=user.email)
         user_schema = CreateUserSchema(
-            login=saved_user.login,
             email=saved_user.email,
             hashed_password="Hidden",
             date_of_create=saved_user.date_of_create,
-            first_name=saved_user.first_name,
-            last_name=saved_user.last_name,
             person_type=saved_user.person_type,
             is_active=saved_user.is_active
         )

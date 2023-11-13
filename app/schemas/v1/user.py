@@ -11,7 +11,6 @@ class PersonType(str, PydanticEnum):
 
 class UserSchema(BaseModel):
     id: int
-    login: str = None
     email: str = None
     first_name: str | None = None
     last_name: str | None = None
