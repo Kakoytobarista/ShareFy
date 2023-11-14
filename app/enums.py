@@ -47,5 +47,5 @@ class EndpointPath(enum.Enum):
     GET_ALL_USERS = "/get_all_users"
     GET_USER = "/get_user/{user_id}"
     GET_ACTIVE_USERS = "/get_active_users"
-    DEACTIVATE_USER = "/deactivate_user"
+    DEACTIVATE_USER = "/deactivate_user/{user_id}"
     CHANGE_PERSON_TYPE = "/change_person_type"

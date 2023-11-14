@@ -53,7 +53,7 @@ async def get_active_users(session: AsyncSession = Depends(get_db)):
     return users
 
 
-@router.get(EndpointPath.DEACTIVATE_USER.value, response_model=DeactivateSchema,
+@router.put(EndpointPath.DEACTIVATE_USER.value, response_model=DeactivateSchema,
             status_code=status.HTTP_200_OK,
             dependencies=[Depends(get_current_user),
                           Depends(PermissionChecker(

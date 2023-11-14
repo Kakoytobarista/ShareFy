@@ -16,10 +16,10 @@ def get_user_model():
 
 @pytest.mark.anyio
 class TestAuth:
+    BASE_ENDPOINT = "/v1/auth"
 
-    @staticmethod
-    async def create_user(async_client: AsyncClient, test_data: AuthDataGen):
-        response = await async_client.post(f"/v1/auth{EndpointPath.REGISTER.value}", json=test_data)
+    async def create_user(self, async_client: AsyncClient, test_data: AuthDataGen):
+        response = await async_client.post(f"{self.BASE_ENDPOINT}{EndpointPath.REGISTER.value}", json=test_data)
         return response
 
     async def test_register(self, async_db_connection: AsyncConnection, async_client: AsyncClient) -> None:
@@ -34,6 +34,6 @@ class TestAuth:
     async def test_login(self, async_client: AsyncClient) -> None:
         test_data = AuthDataGen()
         await self.create_user(test_data=test_data.get_data(), async_client=async_client)
-        response = await async_client.post(f"/v1/auth{EndpointPath.LOGIN.value}", json=test_data.get_data())
+        response = await async_client.post(f"{self.BASE_ENDPOINT}{EndpointPath.LOGIN.value}", json=test_data.get_data())
         Assertions.assert_are_equal(response.status_code, status.HTTP_200_OK)
         Assertions.assert_is_not_none(response.json())
