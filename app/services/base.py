@@ -1,8 +1,8 @@
-from abc import abstractmethod, ABC, ABCMeta
-from typing import List, Union, Any, Type
+from abc import ABC, ABCMeta, abstractmethod
+from typing import Any, List, Type, Union
 
 from app.types import T
-from app.utils.utils import combine_classes, ManagerCombine
+from app.utils.utils import ManagerCombine, combine_classes
 
 
 class AbstractBaseService(ABC, metaclass=ABCMeta):

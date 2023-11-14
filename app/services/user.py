@@ -4,7 +4,7 @@ from typing import List
 from fastapi import HTTPException
 
 from app.enums import ErrorEnum
-from app.schemas.v1.user import UserSchema, DeactivateSchema, PersonTypeSchema
+from app.schemas.v1.user import DeactivateSchema, PersonTypeSchema, UserSchema
 from app.services.base import BaseService
 
 

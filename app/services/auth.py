@@ -1,7 +1,7 @@
 from http import HTTPStatus
 
-from passlib.context import CryptContext
 from fastapi import HTTPException
+from passlib.context import CryptContext
 
 from app.enums import ErrorEnum
 from app.models.v1.user import UserModel

@@ -1,13 +1,12 @@
 import os
+from copy import deepcopy
 from datetime import datetime, timedelta
 from typing import Annotated
-from copy import deepcopy
 
-
-from fastapi import HTTPException, Depends
-from fastapi.security import OAuth2PasswordBearer
-from jose import jwt, JWTError
 from dotenv import load_dotenv
+from fastapi import Depends, HTTPException
+from fastapi.security import OAuth2PasswordBearer
+from jose import JWTError, jwt
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
 from starlette import status

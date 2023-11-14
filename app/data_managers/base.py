@@ -1,5 +1,5 @@
-from abc import abstractmethod, ABC, ABCMeta
-from typing import Type, Union, List, Any
+from abc import ABC, ABCMeta, abstractmethod
+from typing import Any, List, Type, Union
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession

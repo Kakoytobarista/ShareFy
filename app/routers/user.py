@@ -6,9 +6,9 @@ from starlette import status
 
 from app.backend.session import get_db
 from app.data_managers.user import UserDataManager
-from app.enums import PersonTypeEnum, EndpointPath
+from app.enums import EndpointPath, PersonTypeEnum
 from app.permission import PermissionChecker
-from app.schemas.v1.user import UserSchema, DeactivateSchema, PersonTypeSchema
+from app.schemas.v1.user import DeactivateSchema, PersonTypeSchema, UserSchema
 from app.services.user import UserService
 from app.utils.token import get_current_user
 

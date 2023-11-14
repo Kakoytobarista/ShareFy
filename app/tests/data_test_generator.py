@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 
 from faker import Faker
 
-
 faker = Faker()
 
 class AbstractAuthDataGen(ABC):

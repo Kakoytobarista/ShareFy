@@ -1,6 +1,7 @@
-from pydantic import BaseModel
 from datetime import datetime
 from enum import Enum as PydanticEnum
+
+from pydantic import BaseModel
 
 
 class PersonType(str, PydanticEnum):

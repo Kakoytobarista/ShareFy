@@ -6,3 +6,5 @@ alembic/env.py
 alembic/script.py.mako
 
 alembic/versions/
+
+.pytest_cache/

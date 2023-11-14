@@ -1,8 +1,8 @@
 import datetime
 
+from sqlalchemy import Boolean, DateTime, Enum, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import mapped_column, Mapped
-from sqlalchemy import Integer, String, DateTime, Enum, Boolean
+from sqlalchemy.orm import Mapped, mapped_column
 
 from app.enums import PersonTypeEnum
 

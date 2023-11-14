@@ -1,11 +1,12 @@
 import asyncio
 from asyncio import current_task
-from typing import Iterator, AsyncGenerator
+from typing import AsyncGenerator, Iterator
 
+import pytest
 import pytest_asyncio
 from httpx import AsyncClient
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, AsyncConnection, async_scoped_session
-import pytest
+from sqlalchemy.ext.asyncio import (AsyncConnection, AsyncSession,
+                                    async_scoped_session, create_async_engine)
 from sqlalchemy.orm import sessionmaker
 
 from app.backend.session import get_db
