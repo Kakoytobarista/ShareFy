@@ -26,9 +26,21 @@ services:
     expose:
       - 5432
 
+  tests:
+    environment:
+      - TEST_ENVIRONMENT=1
+    build:
+      context: ../app
+
+    command: [ "pytest", "tests" ]
+
   nginx:
     image: nginx:latest
     ports:
       - "80:80"
+    expose:
+      - 80
+    depends_on:
+      - app
     volumes:
       - ./nginx:/etc/nginx/conf.d
