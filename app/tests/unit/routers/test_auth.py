@@ -4,10 +4,10 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncConnection
 from starlette import status
 
-from app.enums import EndpointPath
-from app.models.v1.user import UserModel
-from app.tests.assertions import Assertions
-from app.tests.data_test_generator import AuthDataGen
+from enums import EndpointPath
+from models.v1.user import UserModel
+from tests.assertions import Assertions
+from tests.data_test_generator import AuthDataGen
 
 pytestmark = pytest.mark.asyncio
 

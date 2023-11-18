@@ -3,9 +3,9 @@ from typing import List
 
 from fastapi import HTTPException
 
-from app.enums import ErrorEnum
-from app.schemas.v1.user import DeactivateSchema, PersonTypeSchema, UserSchema
-from app.services.base import BaseService
+from enums import ErrorEnum
+from schemas.v1.user import DeactivateSchema, PersonTypeSchema, UserSchema
+from services.base import BaseService
 
 
 class UserService(BaseService):

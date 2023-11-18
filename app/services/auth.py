@@ -1,14 +1,14 @@
 from http import HTTPStatus
 
-from fastapi import HTTPException
+from fastapi import HTTPException, Response
 from passlib.context import CryptContext
 
-from app.enums import ErrorEnum
-from app.models.v1.user import UserModel
-from app.schemas.v1.auth import CreateUserSchema, LoginSchema
-from app.schemas.v1.token import TokenResponseSchema
-from app.services.base import BaseService
-from app.utils.token import create_access_token
+from enums import ErrorEnum
+from models.v1.user import UserModel
+from schemas.v1.auth import CreateUserSchema, LoginSchema
+from schemas.v1.token import TokenResponseSchema
+from services.base import BaseService
+from utils.token import create_access_token
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -35,27 +35,23 @@ class AuthService(HashingMixin, BaseService):
 
         user_model = UserModel(
             email=user.email,
-            hashed_password=self.bcrypt(user.hashed_password),
-            date_of_create=user.date_of_create,
+            hashed_password=self.bcrypt(user.hashed_password)
         )
 
         await self.manager.create(model=user_model)
         saved_user = await self.manager.get_user_by_email(email=user.email)
         user_schema = CreateUserSchema(
             email=saved_user.email,
-            hashed_password="Hidden",
-            date_of_create=saved_user.date_of_create,
-            person_type=saved_user.person_type,
-            is_active=saved_user.is_active
+            hashed_password="Hidden"
         )
         return user_schema
 
-    async def login(self, login_data: LoginSchema) -> TokenResponseSchema:
+    async def login(self, response: Response, login_data: LoginSchema) -> TokenResponseSchema:
         user = await self.manager.get_user_by_email(email=login_data.email)
         if not user:
             raise HTTPException(status_code=HTTPStatus.BAD_REQUEST, detail=ErrorEnum.USER_NOT_FOUND.value)
         if not self.verify(user.hashed_password, login_data.hashed_password):
             raise HTTPException(status_code=HTTPStatus.BAD_REQUEST, detail=ErrorEnum.INCORRECT_PASSWORD.value)
 
-        access_token = await create_access_token(user=user)
+        access_token = await create_access_token(user=user, response=response)
         return TokenResponseSchema(access_token=access_token, token_type="bearer")

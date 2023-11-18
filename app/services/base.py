@@ -1,9 +1,11 @@
 from abc import ABC, ABCMeta, abstractmethod
-from typing import Any, List, Type, Union
+from typing import Any, List, Union
 
-from app.types import T
-from app.utils.utils import ManagerCombine, combine_classes
+from utils.utils import ManagerCombine, combine_classes
 
+from typing import TypeVar
+
+T = TypeVar('T')
 
 class AbstractBaseService(ABC, metaclass=ABCMeta):
     @abstractmethod

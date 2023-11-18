@@ -1,12 +1,14 @@
-from abc import ABC
 from typing import List
+from typing import Any, Protocol
 
-from app.data_managers.base import AbstractDataManager
+
+from data_managers.base import AbstractDataManager
 
 
-class ManagerCombine:
+class ManagerCombine(Protocol):
     """Class encapsulate few managers"""
-    pass
+    def __getattr__(self, name: str) -> Any:
+        ...
 
 
 def combine_classes(*classes: List[AbstractDataManager]):

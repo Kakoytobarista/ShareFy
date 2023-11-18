@@ -1,20 +1,28 @@
-import logging
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
-from fastapi import Request
+from fastapi.openapi.docs import get_swagger_ui_html
 
 from starlette.middleware.cors import CORSMiddleware
 from starlette.middleware.errors import ServerErrorMiddleware
 from starlette.middleware.gzip import GZipMiddleware
 from starlette.middleware.trustedhost import TrustedHostMiddleware
-from starlette.responses import Response
 
-from app.routers import auth, user
+from database.session import init_models
+from routers import auth, user
 
-app = FastAPI()
 
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+@asynccontextmanager
+async def lifespan(app_: FastAPI):
+    await init_models()
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
+
+@app.get("/docs", include_in_schema=False)
+async def custom_swagger_ui_html():
+    return get_swagger_ui_html(openapi_url="/openapi.json", title="Swagger UI")
 
 app.add_middleware(
     CORSMiddleware,
@@ -24,32 +32,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-@app.middleware("http")
-async def api_logging(request: Request, call_next):
-    response = await call_next(request)
-
-    response_body = b""
-    async for chunk in response.body_iterator:
-        response_body += chunk
-    log_message = {
-        "host": request.url.hostname,
-        "endpoint": request.url.path,
-        "response": response_body.decode()
-    }
-    logger.debug(log_message)
-    return Response(content=response_body, status_code=response.status_code,
-                    headers=dict(response.headers), media_type=response.media_type)
-
-
 app.include_router(auth.router, prefix="/v1", tags=["auth"])
 app.include_router(user.router, prefix="/v1", tags=["users"])
 
 app.add_middleware(GZipMiddleware)
 app.add_middleware(TrustedHostMiddleware)
-app.add_middleware(ServerErrorMiddleware, debug=False)
+app.add_middleware(ServerErrorMiddleware, debug=True)
+
 
 if __name__ == "__main__":
     import uvicorn
-
     uvicorn.run(app, host="0.0.0.0", port=8000)

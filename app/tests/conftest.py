@@ -9,15 +9,15 @@ from sqlalchemy.ext.asyncio import (AsyncConnection, AsyncSession,
                                     async_scoped_session, create_async_engine)
 from sqlalchemy.orm import sessionmaker
 
-from app.backend.session import get_db
-from app.main import app
-from app.models.v1.user import UserModel
+from database.session import get_db, DATABASE_URL
+from main import app
+from models.v1.user import UserModel
 
 
 @pytest_asyncio.fixture(scope="session")
 async def async_db_connection() -> AsyncGenerator[AsyncConnection, None]:
     async_engine = create_async_engine(
-        "sqlite+aiosqlite:///", echo=False, connect_args={"timeout": 0.5}
+        DATABASE_URL, echo=False, connect_args={"timeout": 0.5}
     )
 
     async with async_engine.begin() as conn:

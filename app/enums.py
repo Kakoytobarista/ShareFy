@@ -22,6 +22,9 @@ class PersonTypeEnum(enum.Enum):
     ADMIN = "admin"
 
 
+class TokenEnum(enum.Enum):
+    TOKEN_KEY = "jwt_token"
+
 class SMTPCredsEnum(enum.Enum):
     MAIL_USERNAME = os.getenv("MAIL_USERNAME")
     MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
@@ -49,3 +52,5 @@ class EndpointPath(enum.Enum):
     GET_ACTIVE_USERS = "/get_active_users"
     DEACTIVATE_USER = "/deactivate_user/{user_id}"
     CHANGE_PERSON_TYPE = "/change_person_type"
+
+

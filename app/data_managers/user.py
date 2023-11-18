@@ -1,7 +1,7 @@
 from typing import List
 
-from app.data_managers.base import SQLAlchemyDataManager
-from app.models.v1.user import UserModel
+from data_managers.base import SQLAlchemyDataManager
+from models.v1.user import UserModel
 
 
 class UserDataManager(SQLAlchemyDataManager):

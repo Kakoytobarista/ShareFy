@@ -1,4 +1,4 @@
-from app.data_managers.base import SQLAlchemyDataManager
+from data_managers.base import SQLAlchemyDataManager
 
 
 class AuthDataManager(SQLAlchemyDataManager):

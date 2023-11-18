@@ -1,13 +1,7 @@
 from datetime import datetime
-from enum import Enum as PydanticEnum
-
 from pydantic import BaseModel
 
-
-class PersonType(str, PydanticEnum):
-    regular = "regular"
-    moderator = "moderator"
-    admin = "admin"
+from enums import PersonTypeEnum
 
 
 class UserSchema(BaseModel):
@@ -16,7 +10,7 @@ class UserSchema(BaseModel):
     first_name: str | None = None
     last_name: str | None = None
     date_of_birth: datetime | None = None
-    person_type: PersonType = "regular"
+    person_type: PersonTypeEnum = PersonTypeEnum.REGULAR
     date_of_create: datetime = None
     is_active: bool | int = None
 
@@ -28,4 +22,4 @@ class DeactivateSchema(BaseModel):
 
 class PersonTypeSchema(BaseModel):
     id: int
-    person_type: PersonType = "regular"
+    person_type: PersonTypeEnum = "regular"
