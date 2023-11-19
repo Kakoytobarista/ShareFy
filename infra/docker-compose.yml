@@ -33,6 +33,8 @@ services:
       - ./nginx:/etc/nginx/conf.d
 
   app:
+    environment:
+      - TEST_ENVIRONMENT=0
     build:
       context: ../app
     restart: always

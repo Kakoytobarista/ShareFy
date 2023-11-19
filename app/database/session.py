@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 
+from logger import logger
 from models.v1.user import Base
 
 load_dotenv()
@@ -16,9 +17,13 @@ db_password = os.getenv("POSTGRES_PASSWORD")
 db_name = os.getenv("POSTGRES_DATABASE")
 
 
-test_environment = os.getenv("TEST_ENVIRONMENT", 1)
-DATABASE_URL = f"postgresql+asyncpg://{db_username}:{db_password}@db/{db_name}"
-# DATABASE_URL = f"sqlite+aiosqlite:///{db_path}"
+test_environment = int(os.getenv("TEST_ENVIRONMENT")) == 1
+if test_environment:
+    DATABASE_URL = f"sqlite+aiosqlite:///{db_path}"
+    logger.debug(f"In test env and use {DATABASE_URL}")
+else:
+    DATABASE_URL = f"postgresql+asyncpg://{db_username}:{db_password}@db/{db_name}"
+    logger.debug(f"In prod env and use {DATABASE_URL}")
 
 engine = create_async_engine(DATABASE_URL)
 SessionLocal = async_sessionmaker(autocommit=False, autoflush=False, bind=engine, class_=AsyncSession)
@@ -31,7 +36,4 @@ async def init_models():
 
 async def get_db():
     db = SessionLocal()
-    try:
-        yield db
-    finally:
-        await db.close()
+    yield db

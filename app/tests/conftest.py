@@ -77,7 +77,7 @@ async def async_client(async_db_session: AsyncSession) -> AsyncClient:
         yield async_db_session
 
     app.dependency_overrides[get_db] = override_get_db
-    return AsyncClient(app=app, base_url="http://test-server")
+    return AsyncClient(app=app, base_url="http://app")
 
 
 @pytest.fixture(scope='session')

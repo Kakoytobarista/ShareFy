@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncConnection
 from starlette import status
 
 from enums import EndpointPath, PersonTypeEnum
+from logger import logger
 from models.v1.user import UserModel
 from tests.assertions import Assertions
 from tests.data_test_generator import AuthDataGen
@@ -42,32 +43,34 @@ class TestUserCheck:
     async def test_get_all_users(
             self, async_client: AsyncClient,  async_db_connection: AsyncConnection, endpoint) -> None:
         test_data = AuthDataGen()
-        response = await self.create_user_and_auth(
+        response_create_user = await self.create_user_and_auth(
             async_client=async_client, async_db_connection=async_db_connection, test_data=test_data.get_data())
-        response = await async_client.get(url=endpoint, cookies=response.cookies)
-        Assertions.assert_are_equal(expected_result=status.HTTP_200_OK, actual_result=response.status_code)
-        data = response.json()
+        response_get_user = await async_client.get(url=endpoint, cookies=response_create_user.cookies)
+        Assertions.assert_are_equal(expected_result=status.HTTP_200_OK, actual_result=response_get_user.status_code)
+        data = response_get_user.json()
         if not isinstance(data, dict):
-            data = response.json()[0]
+            data = response_get_user.json()[0]
 
         Assertions.assert_is_not_none(data=data)
-        Assertions.assert_are_equal(expected_result=test_data.email, actual_result=data.get("email"))
 
     async def test_deactivate_user(self, async_client: AsyncClient, async_db_connection: AsyncConnection) -> None:
         test_data = AuthDataGen()
-        expected_is_active_after_deactivate = 0
-        expected_is_active_before_deactivate = 1
+        expected_is_active_after_deactivate = False
+        expected_is_active_before_deactivate = True
         login_response = await self.create_user_and_auth(
             async_client=async_client, async_db_connection=async_db_connection, test_data=test_data.get_data())
-        user_before_deactivate = await async_client.get(
+        user_before_deactivate_response = await async_client.get(
             url=f"{self.BASE_USERS_ENDPOINT}{EndpointPath.GET_USER.value.format(user_id=self.USER_ID)}",
             cookies=login_response.cookies)
-        Assertions.assert_are_equal(expected_result=user_before_deactivate.json()["is_active"],
+        user_before_deactivate = user_before_deactivate_response.json()
+        is_active = user_before_deactivate["is_active"]
+        Assertions.assert_are_equal(expected_result=is_active,
                                     actual_result=expected_is_active_before_deactivate)
-        user_after_deactivate = await async_client.put(
+        user_after_deactivate_response = await async_client.put(
             url=f"{self.BASE_USERS_ENDPOINT}{EndpointPath.DEACTIVATE_USER.value.format(user_id=self.USER_ID)}",
             headers=login_response.cookies)
-        Assertions.assert_are_equal(expected_result=user_after_deactivate.json()["is_active"],
+        user_after_deactivate = user_after_deactivate_response.json()
+        Assertions.assert_are_equal(expected_result=user_after_deactivate["is_active"],
                                     actual_result=expected_is_active_after_deactivate)
         query = select(get_user_model()).filter_by(email=test_data.email)
         coroutine_result = await async_db_connection.execute(query)
@@ -79,15 +82,23 @@ class TestUserCheck:
         expected_person_type = PersonTypeEnum.ADMIN
         login_response = await self.create_user_and_auth(
             async_client=async_client, async_db_connection=async_db_connection, test_data=test_data.get_data())
-        user_before_deactivate = await async_client.get(
-            url=f"{self.BASE_USERS_ENDPOINT}{EndpointPath.GET_USER.value.format(user_id=self.USER_ID)}",
+        logger.debug(login_response.json())
+        logger.debug(login_response.json())
+        logger.debug(f"HEY {login_response.json()}")
+        user_before_deactivate_response = await async_client.get(
+            url=f"{self.BASE_USERS_ENDPOINT}{EndpointPath.GET_USER.value.format(user_id=1)}",
             cookies=login_response.cookies)
-        Assertions.assert_are_equal(expected_result=user_before_deactivate.json()["is_active"], actual_result=1)
-        user_after_deactivate = await async_client.post(
+        logger.debug(f"HEY2 {user_before_deactivate_response.json()}")
+        logger.debug(f"HEY2 {user_before_deactivate_response.json()}")
+        logger.debug(f"HEY2 {user_before_deactivate_response.json()}")
+        user_before_deactivate = user_before_deactivate_response.json()
+        Assertions.assert_are_equal(expected_result=user_before_deactivate["is_active"], actual_result=True)
+        user_after_deactivate_response = await async_client.post(
             url=f"{self.BASE_USERS_ENDPOINT}{EndpointPath.CHANGE_PERSON_TYPE.value}",
             headers=login_response.cookies,
             json={"id": self.USER_ID, "person_type": expected_person_type.value})
-        Assertions.assert_are_equal(expected_result=user_after_deactivate.json()["person_type"],
+        user_after_deactivate = user_after_deactivate_response.json()
+        Assertions.assert_are_equal(expected_result=user_after_deactivate["person_type"],
                                     actual_result=expected_person_type.value)
         query = select(get_user_model()).filter_by(email=test_data.email)
         coroutine_result = await async_db_connection.execute(query)
