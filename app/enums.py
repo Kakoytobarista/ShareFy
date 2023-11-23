@@ -7,6 +7,7 @@ load_dotenv()
 
 
 class ErrorEnum(enum.Enum):
+    INVALID_REFRESH_TOKEN = "Invalid Refresh Token"
     USER_NOT_FOUND = "User not found"
     INCORRECT_PASSWORD = "Incorrect password"
     INVALID_INPUT_DATA = "Invalid input data"
@@ -24,6 +25,7 @@ class PersonTypeEnum(enum.Enum):
 
 class TokenEnum(enum.Enum):
     TOKEN_KEY = "jwt_token"
+    REFRESH_TOKEN_KEY = "refresh_token"
 
 class SMTPCredsEnum(enum.Enum):
     MAIL_USERNAME = os.getenv("MAIL_USERNAME")
@@ -47,6 +49,7 @@ class SubjectMailEnum(enum.Enum):
 class EndpointPath(enum.Enum):
     REGISTER = "/register"
     LOGIN = "/login"
+    GET_ACCESS_TOKEN_BY_REFRESH = "/token/refresh"
     GET_ALL_USERS = "/get_all_users"
     GET_USER = "/get_user/{user_id}"
     GET_ACTIVE_USERS = "/get_active_users"
@@ -54,3 +57,5 @@ class EndpointPath(enum.Enum):
     CHANGE_PERSON_TYPE = "/change_person_type"
 
 
+class TokenTypeEnum(enum.Enum):
+    BEARER = "bearer"

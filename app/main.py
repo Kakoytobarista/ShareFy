@@ -9,7 +9,7 @@ from starlette.middleware.gzip import GZipMiddleware
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from database.session import init_models
-from routers import auth, user
+from routers import auth, user, token
 
 
 @asynccontextmanager
@@ -34,6 +34,7 @@ app.add_middleware(
 
 app.include_router(auth.router, prefix="/v1", tags=["auth"])
 app.include_router(user.router, prefix="/v1", tags=["users"])
+app.include_router(token.router, prefix="/v1", tags=["token"])
 
 app.add_middleware(GZipMiddleware)
 app.add_middleware(TrustedHostMiddleware)

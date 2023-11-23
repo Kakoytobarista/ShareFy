@@ -12,8 +12,12 @@ class UserService(BaseService):
     def __init__(self, managers):
         super().__init__(managers=managers)
 
-    def get_user(self, user: UserSchema) -> UserSchema:
-        return self.manager.get_user_by_id(user_id=user.id)
+    async def get_user(self, user: UserSchema) -> UserSchema:
+        user = await self.manager.get_user_by_id(user_id=user.id)
+        if not user:
+            raise HTTPException(status_code=HTTPStatus.NOT_FOUND,
+                                detail=ErrorEnum.USER_NOT_FOUND.value)
+        return user
 
     async def get_all_users(self) -> List[UserSchema]:
         return await self.manager.get_all_users()
