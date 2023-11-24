@@ -2,18 +2,17 @@ import os
 from copy import deepcopy
 from datetime import datetime, timedelta, timezone
 
+from data_managers.user import UserDataManager
+from database.session import get_db
 from dotenv import load_dotenv
+from enums import ErrorEnum, TokenEnum
 from fastapi import Depends, HTTPException, Request
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
-from sqlalchemy.ext.asyncio import AsyncSession
-from starlette import status
-
-from database.session import get_db
-from data_managers.user import UserDataManager
-from enums import ErrorEnum, TokenEnum
 from models.v1.user import UserModel
 from schemas.v1.token import AccessTokenSchema, RefreshTokenSchema
+from sqlalchemy.ext.asyncio import AsyncSession
+from starlette import status
 
 load_dotenv()
 

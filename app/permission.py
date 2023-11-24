@@ -1,11 +1,10 @@
 import enum
 
-from fastapi import Depends, HTTPException
-from starlette import status
-
 from enums import ErrorEnum
+from fastapi import Depends, HTTPException
 from logger import logger
 from schemas.v1.user import PersonTypeSchema
+from starlette import status
 from utils.token import get_current_user
 
 

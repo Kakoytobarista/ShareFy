@@ -1,9 +1,7 @@
 from abc import ABC, ABCMeta, abstractmethod
-from typing import Any, List, Union
+from typing import Any, List, TypeVar, Union
 
 from utils.utils import ManagerCombine, combine_classes
-
-from typing import TypeVar
 
 T = TypeVar('T')
 

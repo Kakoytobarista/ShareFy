@@ -1,10 +1,9 @@
 from abc import ABC, ABCMeta, abstractmethod
-from typing import Any, List, Type, Union, TypeVar
-
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
+from typing import Any, List, Type, TypeVar, Union
 
 from models.v1.user import Base
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 T = TypeVar('T')
 

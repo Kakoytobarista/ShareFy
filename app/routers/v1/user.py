@@ -1,15 +1,14 @@
 from typing import List
 
-from fastapi import APIRouter, Depends
-from sqlalchemy.ext.asyncio import AsyncSession
-from starlette import status
-
-from database.session import get_db
 from data_managers.user import UserDataManager
+from database.session import get_db
 from enums import EndpointPath, PersonTypeEnum
+from fastapi import APIRouter, Depends
 from permission import PermissionChecker
 from schemas.v1.user import DeactivateSchema, PersonTypeSchema, UserSchema
 from services.user import UserService
+from sqlalchemy.ext.asyncio import AsyncSession
+from starlette import status
 from utils.token import get_current_user
 
 router = APIRouter(prefix="/user")

@@ -1,7 +1,7 @@
 from datetime import datetime
-from pydantic import BaseModel
 
 from enums import PersonTypeEnum
+from pydantic import BaseModel
 
 
 class UserSchema(BaseModel):

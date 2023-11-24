@@ -1,11 +1,10 @@
 import pytest
+from enums import EndpointPath
 from httpx import AsyncClient
+from models.v1.user import UserModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncConnection
 from starlette import status
-
-from enums import EndpointPath
-from models.v1.user import UserModel
 from tests.assertions import Assertions
 from tests.data_test_generator import AuthDataGen
 

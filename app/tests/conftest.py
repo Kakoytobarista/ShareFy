@@ -4,14 +4,13 @@ from typing import AsyncGenerator, Iterator
 
 import pytest
 import pytest_asyncio
+from database.session import DATABASE_URL, get_db
 from httpx import AsyncClient
+from main import app
+from models.v1.user import UserModel
 from sqlalchemy.ext.asyncio import (AsyncConnection, AsyncSession,
                                     async_scoped_session, create_async_engine)
 from sqlalchemy.orm import sessionmaker
-
-from database.session import get_db, DATABASE_URL
-from main import app
-from models.v1.user import UserModel
 
 
 @pytest_asyncio.fixture(scope="session")

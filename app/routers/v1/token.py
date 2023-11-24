@@ -1,12 +1,11 @@
-from fastapi import Depends, Request, Response, APIRouter
-from sqlalchemy.ext.asyncio import AsyncSession
-
 from data_managers.user import UserDataManager
 from database.session import get_db
 from enums import TokenEnum
+from fastapi import APIRouter, Depends, Request, Response
 from schemas.v1.token import AccessTokenSchema
 from services.user import UserService
-from utils.token import get_current_user, TokenManager, TokenService
+from sqlalchemy.ext.asyncio import AsyncSession
+from utils.token import TokenManager, TokenService, get_current_user
 
 router = APIRouter(prefix="/token")
 

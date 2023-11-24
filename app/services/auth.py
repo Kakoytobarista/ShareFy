@@ -1,10 +1,9 @@
 from http import HTTPStatus
 
-from fastapi import HTTPException
-from passlib.context import CryptContext
-
 from enums import ErrorEnum
+from fastapi import HTTPException
 from models.v1.user import UserModel
+from passlib.context import CryptContext
 from schemas.v1.auth import CreateUserSchema, LoginSchema
 from services.base import BaseService
 

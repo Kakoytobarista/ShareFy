@@ -1,15 +1,14 @@
-from fastapi import APIRouter, Depends, Response
-from sqlalchemy.ext.asyncio import AsyncSession
-from starlette import status
-
-from database.session import get_db
 from data_managers.auth import AuthDataManager
 from data_managers.user import UserDataManager
+from database.session import get_db
 from enums import EndpointPath, TokenEnum
+from fastapi import APIRouter, Depends, Response
 from schemas.v1.auth import CreateUserSchema, LoginSchema
 from schemas.v1.token import AccessTokenSchema
 from services.auth import AuthService
-from utils.token import TokenService, TokenManager
+from sqlalchemy.ext.asyncio import AsyncSession
+from starlette import status
+from utils.token import TokenManager, TokenService
 
 router = APIRouter(prefix="/auth")
 

@@ -1,9 +1,8 @@
 import os
 
-from fastapi import BackgroundTasks
-from fastapi_mail import ConnectionConfig, MessageSchema, FastMail, MessageType
-
 from enums import SMTPCredsEnum
+from fastapi import BackgroundTasks
+from fastapi_mail import ConnectionConfig, FastMail, MessageSchema, MessageType
 
 conf = ConnectionConfig(
     MAIL_USERNAME=SMTPCredsEnum.MAIL_USERNAME.value,

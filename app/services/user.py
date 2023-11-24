@@ -1,9 +1,8 @@
 from http import HTTPStatus
 from typing import List
 
-from fastapi import HTTPException
-
 from enums import ErrorEnum
+from fastapi import HTTPException
 from schemas.v1.user import DeactivateSchema, PersonTypeSchema, UserSchema
 from services.base import BaseService
 

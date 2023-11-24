@@ -1,6 +1,4 @@
-from typing import List
-from typing import Any, Protocol
-
+from typing import Any, List, Protocol
 
 from data_managers.base import AbstractDataManager
 

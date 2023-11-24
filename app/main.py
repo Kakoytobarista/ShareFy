@@ -1,15 +1,13 @@
 from contextlib import asynccontextmanager
 
+from database.session import init_models
 from fastapi import FastAPI
 from fastapi.openapi.docs import get_swagger_ui_html
-
+from routers.v1 import auth, token, user
 from starlette.middleware.cors import CORSMiddleware
 from starlette.middleware.errors import ServerErrorMiddleware
 from starlette.middleware.gzip import GZipMiddleware
 from starlette.middleware.trustedhost import TrustedHostMiddleware
-
-from database.session import init_models
-from routers.v1 import auth, token, user
 
 
 @asynccontextmanager

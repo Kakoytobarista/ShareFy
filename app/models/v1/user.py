@@ -1,10 +1,10 @@
 import datetime
 import enum
+
+from enums import PersonTypeEnum
 from sqlalchemy import Boolean, DateTime, Enum, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Mapped, mapped_column
-
-from enums import PersonTypeEnum
 
 Base = declarative_base()
 
