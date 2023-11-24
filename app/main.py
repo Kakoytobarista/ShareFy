@@ -9,7 +9,7 @@ from starlette.middleware.gzip import GZipMiddleware
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from database.session import init_models
-from routers import auth, user, token
+from routers.v1 import auth, token, user
 
 
 @asynccontextmanager

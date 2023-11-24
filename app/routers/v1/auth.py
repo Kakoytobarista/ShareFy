@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Response, Request
+from fastapi import APIRouter, Depends, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
@@ -7,8 +7,9 @@ from data_managers.auth import AuthDataManager
 from data_managers.user import UserDataManager
 from enums import EndpointPath, TokenEnum
 from schemas.v1.auth import CreateUserSchema, LoginSchema
-from schemas.v1.token import TokenResponseSchema
+from schemas.v1.token import AccessTokenSchema
 from services.auth import AuthService
+from utils.token import TokenService, TokenManager
 
 router = APIRouter(prefix="/auth")
 
@@ -25,14 +26,19 @@ async def register(user: CreateUserSchema, session: AsyncSession = Depends(get_d
     return created_user
 
 
-@router.post(EndpointPath.LOGIN.value, response_model=TokenResponseSchema, status_code=status.HTTP_200_OK)
+@router.post(EndpointPath.LOGIN.value, response_model=AccessTokenSchema, status_code=status.HTTP_200_OK)
 async def login(response: Response, login_data: LoginSchema, session: AsyncSession = Depends(get_db)):
     auth_service = AuthService(managers=[AuthDataManager(session=session),
                                          UserDataManager(session=session)])
-    login_schema = await auth_service.login(login_data)
-    response.set_cookie(
-        key=TokenEnum.TOKEN_KEY.value, value=login_schema.access_token, expires=login_schema.expired_date, httponly=True)
-    response.set_cookie(
-        key=TokenEnum.REFRESH_TOKEN_KEY.value, value=login_schema.refresh_token, httponly=True)
+    token_service = TokenService(manager=TokenManager())
 
-    return login_schema
+    user = await auth_service.login(login_data)
+    access_token = await token_service.get_access_token(user_data=user)
+    refresh_token = await token_service.get_refresh_token(user_data=user)
+    response.set_cookie(
+        key=TokenEnum.TOKEN_KEY.value, value=access_token.access_token,
+        expires=access_token.expired_date, httponly=True)
+    response.set_cookie(
+        key=TokenEnum.REFRESH_TOKEN_KEY.value, value=refresh_token.refresh_token, httponly=True)
+
+    return access_token
