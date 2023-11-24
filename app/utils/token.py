@@ -53,7 +53,7 @@ class TokenManager:
         user_copy = deepcopy(user_data)
         to_encode_data = {"exp": expire_utc, "sub": user_copy.email}
         access_token = jwt.encode(claims=to_encode_data, key=self.SECRET_KEY, algorithm=self.ALGORITHM)
-        return AccessTokenSchema(access_token=access_token, token_key_name=TokenEnum.TOKEN_KEY.value,
+        return AccessTokenSchema(access_token=access_token, token_type=TokenEnum.TOKEN_KEY.value,
                                  expired_date=expire_utc)
 
     async def decode_refresh_token(self, refresh_token: str) -> str:
