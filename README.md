@@ -8,18 +8,27 @@ ShareFy is a groundbreaking application designed to redefine how you share and s
 ### Guide:
 
 1. Set ENVS:
-   ```bash
-   PYTHONPATH=$PYTHONPATH:/path_to_sharefy/ShareFy
-
+```bash
+PYTHONPATH=$PYTHONPATH:/path_to_sharefy/ShareFy
+```
 2. Create env file with create_env_file.sh file:
-```chmod 775 create_env_file.sh```
+```
+chmod 775 create_env_file.sh
+```
 
-3. Use create_env_file.sh 
+3. Use create_env_file.sh:
 ```
 ./create_env_file.sh
 ```
-4. Extend app
-```docker-compose up -d --build```
+4. Extend app:
+```
+docker-compose up -d --build
+```
+
+5. Import postman collection (Optional):
+```
+docs/ShareFy.postman_collection.json
+```
 ___
 ### Now everything is ready. Let the savings begin! 🚀
 ```I appreciate your patience, and thank you for pointing that out.```
