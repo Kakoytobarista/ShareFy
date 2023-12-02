@@ -1,0 +1,257 @@
+{
+	"info": {
+		"_postman_id": "f835abc6-3002-4e35-8d85-4e94dc50eef5",
+		"name": "ShareFy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"aslan@mail.ru\",\n    \"hashed_password\": \"aslan\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "10.199.199.159:8000/v1/auth/login",
+							"host": [
+								"10",
+								"199",
+								"199",
+								"159"
+							],
+							"port": "8000",
+							"path": [
+								"v1",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "0.0.0.0:8000/v1/register",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "8000",
+							"path": [
+								"v1",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "get_all_users",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDAzMzQ4OTMsInN1YiI6ImhleWhleUBtYWlsLnJ1In0.ryNC0OayuDPPMEqlbgS8mYcplWIp1zTPdW_LmVPIFeQ",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "0.0.0.0:80/v1/user/get_all_users",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "80",
+							"path": [
+								"v1",
+								"user",
+								"get_all_users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_user",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDAzMzQwOTIsInN1YiI6ImhleWhleUBtYWlsLnJ1In0.o27JCmiS7zsWXBNLDIxjCqz_Cuc080qh5zoUIXosmII",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "0.0.0.0:80/v1/user/get_user/1",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "80",
+							"path": [
+								"v1",
+								"user",
+								"get_user",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_active_users",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDAzMzQwOTIsInN1YiI6ImhleWhleUBtYWlsLnJ1In0.o27JCmiS7zsWXBNLDIxjCqz_Cuc080qh5zoUIXosmII",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "0.0.0.0:80/v1/user/get_active_users",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "80",
+							"path": [
+								"v1",
+								"user",
+								"get_active_users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deactivate_user",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDAzMzQwOTIsInN1YiI6ImhleWhleUBtYWlsLnJ1In0.o27JCmiS7zsWXBNLDIxjCqz_Cuc080qh5zoUIXosmII",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "0.0.0.0:80/v1/user/deactivate_user/1",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "80",
+							"path": [
+								"v1",
+								"user",
+								"deactivate_user",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "change_person_type",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDAzMzQwOTIsInN1YiI6ImhleWhleUBtYWlsLnJ1In0.o27JCmiS7zsWXBNLDIxjCqz_Cuc080qh5zoUIXosmII",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 1,\n    \"person_type\": \"moderator\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "0.0.0.0:80/v1/user/change_person_type",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "80",
+							"path": [
+								"v1",
+								"user",
+								"change_person_type"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Token",
+			"item": [
+				{
+					"name": "get_access_token",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
